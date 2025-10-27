@@ -240,7 +240,7 @@ export const getResultDetails = (resultType: string) => {
     },
     'Partially Prepared': {
       title: 'Partially Prepared 🤔',
-      description: 'You have a solid foundation, but there are still some areas where you could develop further to be optimally prepared for emigrant life.',
+      description: 'You have a solid foundation, but there are still some areas where you could develop further to be optimally prepared for an expat life.',
       color: 'text-yellow-600'
     },
     'Not Yet Ready': {

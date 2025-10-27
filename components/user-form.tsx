@@ -48,6 +48,36 @@ export default function UserForm() {
       });
 
       console.log('✅ User session saved:', userId);
+
+      // Subscribe to Mailchimp (non-blocking)
+      try {
+        const mailchimpResponse = await fetch('/api/mailchimp/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email.trim().toLowerCase(),
+            firstName: name.trim(),
+            tags: ['Expat Mindset Test'],
+            mergeFields: {
+              SOURCE: 'Expat Mindset Test'
+            }
+          }),
+        });
+
+        const mailchimpData = await mailchimpResponse.json();
+        
+        if (mailchimpData.success) {
+          console.log('✅ Mailchimp subscription:', mailchimpData.message);
+        } else {
+          console.warn('⚠️ Mailchimp subscription warning:', mailchimpData.message);
+        }
+      } catch (mailchimpError) {
+        // Log but don't fail - Mailchimp is optional
+        console.warn('⚠️ Mailchimp subscription failed (non-critical):', mailchimpError);
+      }
+
       toast.success('Daten gespeichert! Quiz startet...');
       
       // Navigate to quiz
@@ -120,7 +150,7 @@ export default function UserForm() {
       <div className="text-center pt-4">
         <p className="text-xs text-gray-500 leading-relaxed">
           Your data will be treated confidentially and used only for evaluation purposes. 
- 	  You will receive the results immediately after completing the test.
+          You will receive the results immediately after completing the test.
         </p>
       </div>
     </form>

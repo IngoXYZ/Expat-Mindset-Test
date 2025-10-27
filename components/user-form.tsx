@@ -67,14 +67,14 @@ export default function UserForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="name" className="text-sm font-medium text-gray-700">
-          Vorname *
+          Your Name *
         </Label>
         <Input
           id="name"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Dein Vorname"
+          placeholder="Your Name"
           required
           className="h-12 text-base border-2 border-gray-200 focus:border-blue-500 transition-colors"
           disabled={isLoading}
@@ -83,14 +83,14 @@ export default function UserForm() {
       
       <div className="space-y-2">
         <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-          E-Mail-Adresse *
+          Your E-Mail *
         </Label>
         <Input
           id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="deine@email.com"
+          placeholder="your@email.com"
           required
           className="h-12 text-base border-2 border-gray-200 focus:border-blue-500 transition-colors"
           disabled={isLoading}
@@ -110,7 +110,7 @@ export default function UserForm() {
             </>
           ) : (
             <>
-              Test starten
+              Start test
               <ArrowRight className="w-5 h-5 ml-2" />
             </>
           )}
@@ -119,8 +119,8 @@ export default function UserForm() {
       
       <div className="text-center pt-4">
         <p className="text-xs text-gray-500 leading-relaxed">
-          Deine Daten werden vertraulich behandelt und nur für die Auswertung verwendet.
-          Die Ergebnisse erhältst du sofort nach Abschluss des Tests.
+          Your data will be treated confidentially and used only for evaluation purposes. 
+ 	  You will receive the results immediately after completing the test.
         </p>
       </div>
     </form>

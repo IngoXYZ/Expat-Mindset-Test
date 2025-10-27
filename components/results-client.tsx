@@ -117,7 +117,7 @@ export default function ResultsClient() {
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold text-gray-900 flex items-center justify-center gap-3">
               <Trophy className="w-8 h-8 text-yellow-500" />
-              Your Emigrant Mindset
+              Your Expat Mindset
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">

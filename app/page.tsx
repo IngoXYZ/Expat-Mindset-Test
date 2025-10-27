@@ -12,11 +12,11 @@ export default function HomePage() {
           <div className="mb-8">
             <h1 className="text-4xl md:text-6xl font-bold text-black mb-6 leading-tight">
               <span className="bg-gradient-to-r from-blue-600 via-orange-500 to-yellow-500 bg-clip-text text-transparent">
-                Emigrant Mindset Test
+                Expat Mindset Test
               </span>
             </h1>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-              Find out in just 5 minutes how well you are mentally and emotionally prepared for emigration.
+              Find out in just 5 minutes how well you are mentally and emotionally prepared for your dream destination.
             </p>
           </div>
 

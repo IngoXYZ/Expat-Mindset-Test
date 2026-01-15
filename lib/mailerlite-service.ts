@@ -17,44 +17,90 @@ const MAILERLITE_GROUP_ID = '176599002499778006';
 const MAILERLITE_API_URL = 'https://connect.mailerlite.com/api';
 
 /**
+ * Sanitize and validate data before sending to MailerLite
+ */
+function sanitizeValue(value: any, defaultValue: string = 'N/A'): string {
+  if (value === null || value === undefined) {
+    return defaultValue;
+  }
+  
+  if (typeof value === 'number') {
+    if (isNaN(value) || !isFinite(value)) {
+      return defaultValue;
+    }
+    return value.toFixed(1);
+  }
+  
+  if (typeof value === 'string') {
+    // Remove any potentially problematic characters
+    return value.trim().substring(0, 1000); // Limit length
+  }
+  
+  return String(value).substring(0, 1000);
+}
+
+/**
  * Create or update subscriber in MailerLite with custom fields
  */
 export async function createOrUpdateSubscriber(
   submission: QuizSubmission
-): Promise<{ success: boolean; subscriberId?: string; error?: string }> {
+): Promise<{ success: boolean; subscriberId?: string; error?: string; details?: any }> {
   try {
+    console.log('🔍 [DEEP DEBUG] Raw submission data:', JSON.stringify(submission, null, 2));
+    
+    // Validate required fields
+    if (!submission.email || typeof submission.email !== 'string') {
+      const error = 'Invalid or missing email';
+      console.error('❌ [VALIDATION ERROR]', error);
+      return { success: false, error };
+    }
+    
+    if (!submission.name || typeof submission.name !== 'string') {
+      const error = 'Invalid or missing name';
+      console.error('❌ [VALIDATION ERROR]', error);
+      return { success: false, error };
+    }
+    
+    if (submission.totalScore === undefined || submission.totalScore === null) {
+      const error = 'Invalid or missing totalScore';
+      console.error('❌ [VALIDATION ERROR]', error);
+      return { success: false, error };
+    }
+
     // Format recommendations as bullet points
-    const recommendationsText = submission.recommendations
-      .map(rec => `• ${rec}`)
-      .join('\\n');
+    const recommendationsText = Array.isArray(submission.recommendations)
+      ? submission.recommendations.map(rec => `• ${rec}`).join('\\n')
+      : 'No recommendations';
+
+    console.log('🔍 [DEBUG] Category scores:', submission.categoryScores);
 
     // Prepare subscriber data with custom fields (lowercase English names)
     // NOTE: 'name' is a default MailerLite field and must be at top level, NOT in fields
     const subscriberData = {
-      email: submission.email,
-      name: submission.name, // Default field at top level
+      email: submission.email.trim().toLowerCase(),
+      name: submission.name.trim(), // Default field at top level
       fields: {
-        // Only custom fields here
-        total_score: submission.totalScore.toString(),
-        max_score: submission.maxScore.toString(),
-        result_type: submission.resultType,
-        recommendations: recommendationsText,
-        submission_date: submission.timestamp,
+        // Only custom fields here - all must be strings
+        total_score: sanitizeValue(submission.totalScore),
+        max_score: sanitizeValue(submission.maxScore),
+        result_type: sanitizeValue(submission.resultType, 'Unknown'),
+        recommendations: recommendationsText.substring(0, 5000), // Limit length
+        submission_date: sanitizeValue(submission.timestamp),
         // Category scores (English lowercase field names)
-        willingness_to_change_score: submission.categoryScores.veraenderungsbereitschaft?.toFixed(1) || 'N/A',
-        adaptability_score: submission.categoryScores.anpassungsfaehigkeit?.toFixed(1) || 'N/A',
-        risk_tolerance_score: submission.categoryScores.risikobereitschaft?.toFixed(1) || 'N/A',
-        financial_situation_score: submission.categoryScores.finanzielle_situation?.toFixed(1) || 'N/A',
-        value_compass_score: submission.categoryScores.wertekompass?.toFixed(1) || 'N/A',
-        need_for_security_score: submission.categoryScores.sicherheitsbeduerfnis?.toFixed(1) || 'N/A',
-        growth_vs_comfort_score: submission.categoryScores.growth_vs_komfort?.toFixed(1) || 'N/A',
-        conformity_vs_rebel_score: submission.categoryScores.konformitaet_vs_rebell?.toFixed(1) || 'N/A',
+        willingness_to_change_score: sanitizeValue(submission.categoryScores?.veraenderungsbereitschaft),
+        adaptability_score: sanitizeValue(submission.categoryScores?.anpassungsfaehigkeit),
+        risk_tolerance_score: sanitizeValue(submission.categoryScores?.risikobereitschaft),
+        financial_situation_score: sanitizeValue(submission.categoryScores?.finanzielle_situation),
+        value_compass_score: sanitizeValue(submission.categoryScores?.wertekompass),
+        need_for_security_score: sanitizeValue(submission.categoryScores?.sicherheitsbeduerfnis),
+        growth_vs_comfort_score: sanitizeValue(submission.categoryScores?.growth_vs_komfort),
+        conformity_vs_rebel_score: sanitizeValue(submission.categoryScores?.konformitaet_vs_rebell),
       },
       groups: [MAILERLITE_GROUP_ID], // Add to specified group
     };
 
-    console.log('📧 Creating/updating subscriber in MailerLite...');
-    console.log('📧 Subscriber data:', JSON.stringify(subscriberData, null, 2));
+    console.log('📧 [REQUEST] Creating/updating subscriber in MailerLite...');
+    console.log('📧 [REQUEST DATA]', JSON.stringify(subscriberData, null, 2));
 
     // Create or update subscriber
     const response = await fetch(`${MAILERLITE_API_URL}/subscribers`, {
@@ -67,12 +113,13 @@ export async function createOrUpdateSubscriber(
       body: JSON.stringify(subscriberData),
     });
 
-    console.log('📧 Response status:', response.status);
-    console.log('📧 Response headers:', Object.fromEntries(response.headers.entries()));
+    console.log('📧 [RESPONSE] Status:', response.status);
+    console.log('📧 [RESPONSE] Status Text:', response.statusText);
+    console.log('📧 [RESPONSE] Headers:', JSON.stringify(Object.fromEntries(response.headers.entries()), null, 2));
 
     // Read response text first for debugging
     const responseText = await response.text();
-    console.log('📧 Response body:', responseText);
+    console.log('📧 [RESPONSE BODY]', responseText);
 
     if (!response.ok) {
       let errorData;
@@ -81,10 +128,26 @@ export async function createOrUpdateSubscriber(
       } catch (e) {
         errorData = { message: responseText };
       }
-      console.error('❌ MailerLite subscriber creation failed:', errorData);
+      
+      console.error('❌ [MAILERLITE ERROR] Full error data:', JSON.stringify(errorData, null, 2));
+      
+      // Extract detailed error message
+      let detailedError = errorData.message || `HTTP ${response.status}`;
+      
+      // Check for validation errors
+      if (errorData.errors) {
+        const validationErrors = Object.entries(errorData.errors)
+          .map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
+          .join('; ');
+        detailedError += `. Validation errors: ${validationErrors}`;
+      }
+      
+      console.error('❌ [DETAILED ERROR]', detailedError);
+      
       return {
         success: false,
-        error: errorData.message || `HTTP ${response.status}: ${responseText}`,
+        error: detailedError,
+        details: errorData,
       };
     }
 
@@ -92,7 +155,7 @@ export async function createOrUpdateSubscriber(
     try {
       result = JSON.parse(responseText);
     } catch (e) {
-      console.error('❌ Failed to parse response JSON:', e);
+      console.error('❌ [PARSE ERROR] Failed to parse response JSON:', e);
       return {
         success: false,
         error: 'Invalid JSON response from MailerLite',

@@ -29,10 +29,12 @@ export async function createOrUpdateSubscriber(
       .join('\\n');
 
     // Prepare subscriber data with custom fields (lowercase English names)
+    // NOTE: 'name' is a default MailerLite field and must be at top level, NOT in fields
     const subscriberData = {
       email: submission.email,
+      name: submission.name, // Default field at top level
       fields: {
-        name: submission.name,
+        // Only custom fields here
         total_score: submission.totalScore.toString(),
         max_score: submission.maxScore.toString(),
         result_type: submission.resultType,

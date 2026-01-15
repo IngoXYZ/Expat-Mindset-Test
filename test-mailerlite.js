@@ -37,8 +37,9 @@ async function testMailerLiteAPI() {
   const testEmail = `test+${Date.now()}@example.com`;
   const subscriberData = {
     email: testEmail,
+    name: 'Test User', // Default field at top level, NOT in fields
     fields: {
-      name: 'Test User',
+      // Only custom fields here
       total_score: '50',
       max_score: '75',
       result_type: 'Well Prepared',

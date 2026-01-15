@@ -10,7 +10,6 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { questions, getResultType, getRecommendations } from '@/lib/questions';
 import { saveQuizSession, getUserSession } from '@/lib/local-storage';
-import { sendQuizResults } from '@/lib/emailjs-service';
 import { useRouter } from 'next/navigation';
 import { toast } from "sonner";
 
@@ -100,22 +99,31 @@ export default function QuizClient() {
         ...results
       });
 
-      // Send email with results
-      const emailSuccess = await sendQuizResults({
-        name: userSession.name,
-        email: userSession.email,
-        totalScore: results.totalScore,
-        maxScore: results.maxScore,
-        resultType: results.resultType,
-        categoryScores: results.categoryScores,
-        recommendations: results.recommendations,
-        timestamp: new Date().toLocaleDateString('en-US') + ' ' + new Date().toLocaleTimeString('en-US')
+      // Send data to MailerLite
+      const mailerliteResponse = await fetch('/api/mailerlite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: userSession.name,
+          email: userSession.email,
+          totalScore: results.totalScore,
+          maxScore: results.maxScore,
+          resultType: results.resultType,
+          categoryScores: results.categoryScores,
+          recommendations: results.recommendations,
+          timestamp: new Date().toLocaleDateString('en-US') + ' ' + new Date().toLocaleTimeString('en-US')
+        }),
       });
 
-      if (emailSuccess) {
-        toast.success('Results sent successfully!');
+      const mailerliteData = await mailerliteResponse.json();
+
+      if (mailerliteData.success) {
+        toast.success('Results sent successfully! Check your email.');
       } else {
-        toast.error('Email sending failed, but results saved');
+        toast.error('Email sending failed, but results saved locally');
+        console.error('MailerLite error:', mailerliteData.error);
       }
 
       router.push('/results');
@@ -219,7 +227,7 @@ export default function QuizClient() {
 
             <div className="text-center pt-2">
               <p className="text-sm text-gray-500">
-                Hello {userSession.name}! Your detailed evaluation will be automatically sent to you via email.
+                Hello {userSession.name}! Your answers will be automatically sent to us via email.
               </p>
             </div>
           </CardContent>

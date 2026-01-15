@@ -7,7 +7,7 @@ export function AppHeader() {
           <div className="text-center">
             <h1 className="text-2xl font-bold text-black tracking-tight">
               <span className="bg-gradient-to-r from-blue-600 via-orange-500 to-yellow-500 bg-clip-text text-transparent">
-                Expat Mindset Test
+                Emigrant Mindset Test
               </span>
             </h1>
           </div>

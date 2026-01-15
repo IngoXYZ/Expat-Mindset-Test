@@ -7,7 +7,7 @@ export const runtime = 'nodejs';
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('🚀 Starting quiz submission (EmailJS version)...');
+    console.log('🚀 Starting quiz submission...');
     
     const { userId, answers, userName, userEmail } = await request.json();
 

@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 
 import { Loader2, ArrowRight } from "lucide-react";
 import { saveUserSession } from '@/lib/local-storage';
-import { initializeEmailJS } from '@/lib/emailjs-service';
 import { useRouter } from 'next/navigation';
 import { toast } from "sonner";
 
@@ -17,11 +16,6 @@ export default function UserForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    // EmailJS initialisieren
-    initializeEmailJS();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,36 +42,6 @@ export default function UserForm() {
       });
 
       console.log('✅ User session saved:', userId);
-
-      // Subscribe to Mailchimp (non-blocking)
-      try {
-        const mailchimpResponse = await fetch('/api/mailchimp/subscribe', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: email.trim().toLowerCase(),
-            firstName: name.trim(),
-            tags: ['Expat Mindset Test'],
-            mergeFields: {
-              SOURCE: 'Expat Mindset Test'
-            }
-          }),
-        });
-
-        const mailchimpData = await mailchimpResponse.json();
-        
-        if (mailchimpData.success) {
-          console.log('✅ Mailchimp subscription:', mailchimpData.message);
-        } else {
-          console.warn('⚠️ Mailchimp subscription warning:', mailchimpData.message);
-        }
-      } catch (mailchimpError) {
-        // Log but don't fail - Mailchimp is optional
-        console.warn('⚠️ Mailchimp subscription failed (non-critical):', mailchimpError);
-      }
-
       toast.success('Daten gespeichert! Quiz startet...');
       
       // Navigate to quiz

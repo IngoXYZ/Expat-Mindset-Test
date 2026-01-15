@@ -1,116 +1,132 @@
 
-# Auswanderer Mindset Test - EmailJS Version
+# Expat Mindset Test - MailerLite Integration
 
-## 🚀 Sofort deployment-bereit für Vercel!
+## 🚀 Ready for deployment on Vercel!
 
 ### ✅ Features
-- 15 Quiz-Fragen in Deutsch
-- Responsive Design (thesmallreset.org Style)
-- **EmailJS Integration** - Ergebnisse per E-Mail
-- **LocalStorage** für Session-Management
-- **Keine Datenbank** erforderlich
+- 15 Quiz questions in English
+- Responsive design (thesmallreset.org style)
+- **MailerLite Integration** - Automated email sequences
+- **LocalStorage** for session management
+- **No database** required
 - Production-ready
 
-## 📧 EmailJS Setup (WICHTIG!)
+## 📧 MailerLite Setup (IMPORTANT!)
 
-### 1. EmailJS Account erstellen
-1. Gehe zu **emailjs.com**
-2. **Registriere** einen kostenlosen Account
-3. **Verifiziere** deine E-Mail
+### 1. Create MailerLite Account
+1. Go to **mailerlite.com**
+2. **Register** for an account (free plan available)
+3. **Verify** your email
 
-### 2. E-Mail Service erstellen
-1. Dashboard → **Email Services** → **Add New Service**
-2. Wähle **Gmail**, **Outlook** oder anderen Provider
-3. **Verbinde** dein E-Mail-Account
-4. Kopiere die **Service ID** (z.B. `service_abc123`)
+### 2. Get API Key
+1. Dashboard → **Integrations** → **Developer API**
+2. Copy your **API Key**
+3. Save it for environment variables
 
-### 3. E-Mail Template erstellen
-1. Dashboard → **Email Templates** → **Create New Template**
-2. **Template Name**: "Quiz Results"
-3. **Template Inhalt**:
+### 3. Create Subscriber Group
+1. Dashboard → **Subscribers** → **Groups**
+2. Create a new group (e.g., "Expat Mindset Test Users")
+3. Copy the **Group ID** from the URL or API settings
 
-```
-Betreff: Neue Auswanderer-Test Teilnahme - {{user_name}}
+### 4. Set Up Email Templates in MailerLite
+Create 4 email templates in MailerLite dashboard:
 
-Hallo,
+1. **Email 1: Test Results** - Immediate send with test results
+2. **Email 2: Keep Dream Alive** - Day 2, personal story
+3. **Email 3: Shadow Work Urgency** - Day 3, create urgency
+4. **Email 4: Final Push** - Day 4, vulnerability and final CTA
 
-ein neuer Teilnehmer hat den Auswanderer-Mindset Test ausgefüllt:
+Use the HTML templates in the `/email-templates/` directory as reference.
 
-TEILNEHMER-DATEN:
-Name: {{user_name}}
-E-Mail: {{user_email}}
-Datum: {{submission_date}}
+### 5. Configure Custom Fields
+Create these custom fields in MailerLite:
+- `name` (Text)
+- `total_score` (Number)
+- `max_score` (Number)
+- `result_type` (Text)
+- `recommendations` (Text)
+- `submission_date` (Text)
+- `veraenderungsbereitschaft_score` (Text)
+- `anpassungsfaehigkeit_score` (Text)
+- `risikobereitschaft_score` (Text)
+- `finanzielle_situation_score` (Text)
+- `wertekompass_score` (Text)
+- `sicherheitsbeduerfnis_score` (Text)
+- `growth_vs_komfort_score` (Text)
+- `konformitaet_vs_rebell_score` (Text)
 
-QUIZ-ERGEBNISSE:
-Gesamtpunktzahl: {{total_score}}/{{max_score}}
-Auswanderer-Typ: {{result_type}}
-
-KATEGORIE-SCORES:
-• Anpassungsfähigkeit: {{adaptability_score}}/5
-• Risikobereitschaft: {{risk_tolerance_score}}/5
-• Finanzielle Situation: {{financial_situation_score}}/5
-• Wertekompass: {{values_compass_score}}/5
-• Sicherheitsbedürfnis: {{security_needs_score}}/5
-
-EMPFEHLUNGEN:
-{{recommendations}}
-
-Viele Grüße,
-The Small Reset Auswanderer-Test
-```
-
-4. Kopiere die **Template ID** (z.B. `template_xyz789`)
-
-### 4. Public Key kopieren
-1. Dashboard → **Account** → **API Keys**
-2. Kopiere den **Public Key**
+### 6. Set Up Automation
+1. Create automation triggered when subscriber is added to the group
+2. Configure email sequence (Emails 1-4 with appropriate delays)
+3. Use custom fields in email templates for personalization
 
 ## 🔧 Vercel Environment Variables
 
-Füge in Vercel → Settings → Environment Variables hinzu:
+Add in Vercel → Settings → Environment Variables:
 
 ```
-NEXT_PUBLIC_EMAILJS_SERVICE_ID=service_abc123
-NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=template_xyz789
-NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key_here
-NEXT_PUBLIC_RECIPIENT_EMAIL=deine@email.com
+MAILERLITE_API_KEY=your_api_key_here
+MAILERLITE_GROUP_ID=your_group_id_here
 ```
 
 ## 🚀 Deployment
 
 ### 1. GitHub Upload
-- Lösche ALLE Dateien in deinem Repository
-- Lade ALLE Dateien aus diesem ZIP ins Root-Verzeichnis hoch
+- Delete ALL files in your repository
+- Upload ALL files from this directory to the root directory
 
 ### 2. Vercel Setup
-- **Root Directory**: `.` (Punkt)
-- **Build Command**: Standard lassen
-- **Environment Variables**: EmailJS Konfiguration (siehe oben)
+- **Root Directory**: `.` (dot)
+- **Build Command**: Leave as default
+- **Environment Variables**: MailerLite configuration (see above)
 
-### 3. Das war's!
-- Vercel erkennt Next.js automatisch
-- Keine Datenbank-Probleme
-- Sofort funktionsfähig
+### 3. That's it!
+- Vercel automatically detects Next.js
+- No database issues
+- Immediately functional
 
-## 📊 Wie es funktioniert
+## 📊 How It Works
 
-1. **User** gibt Name + E-Mail ein → **LocalStorage**
-2. **User** füllt Quiz aus → **LocalStorage** 
-3. **Quiz-Ergebnisse** werden berechnet
-4. **EmailJS** sendet alle Daten per E-Mail an dich
-5. **User** sieht sofort seine Ergebnisse
+1. **User** enters name + email → **LocalStorage**
+2. **User** completes quiz → **LocalStorage** 
+3. **Quiz results** are calculated
+4. **MailerLite API** creates/updates subscriber with custom fields
+5. **MailerLite Automation** sends email sequence
+6. **User** sees results immediately
 
-## 🎯 Vorteile
+## 🎯 Advantages
 
-- ✅ **Sofort funktional** auf Vercel
-- ✅ **Keine Database-Probleme**
-- ✅ **E-Mails automatisch gesammelt**
-- ✅ **Vollständige Quiz-Funktionalität**
-- ✅ **Responsive Design**
+- ✅ **Immediately functional** on Vercel
+- ✅ **No database problems**
+- ✅ **Automated email sequences**
+- ✅ **Complete quiz functionality**
+- ✅ **Responsive design**
+- ✅ **Professional email marketing integration**
+
+## 📧 Email Sequence
+
+1. **Email 1** (Immediate): Test results with CTA to join forum
+2. **Email 2** (Day 2): Personal story about moving abroad, CTA to YouTube
+3. **Email 3** (Day 3): Shadow Work introduction with urgency, CTA to book strategy call
+4. **Email 4** (Day 4): Final push with vulnerability, CTA to download Shadow Work Starter Kit
 
 ## 📞 Support
 
-Bei Fragen zur EmailJS Konfiguration:
-- EmailJS Dokumentation: docs.emailjs.com
-- Video-Tutorials verfügbar
-- Kostenloser Support-Chat
+For MailerLite configuration questions:
+- MailerLite Documentation: developers.mailerlite.com
+- Support: support.mailerlite.com
+- Community forum available
+
+## 🗂️ Project Structure
+
+```
+/app                    # Next.js app directory
+  /api
+    /mailerlite        # MailerLite integration API
+    /quiz/submit       # Quiz submission endpoint
+/components            # React components
+/email-templates       # HTML email templates (4 emails)
+/lib                   # Utility functions
+  mailerlite-service.ts # MailerLite service
+  questions.ts         # Quiz questions and logic
+```

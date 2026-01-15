@@ -1,0 +1,7 @@
+Files to update:
+1. package.json
+2. lib/questions.ts
+3. app/layout.tsx
+4. components/app-header.tsx
+5. TRANSLATION_REPORT.md (historical)
+6. package-lock.json

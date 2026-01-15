@@ -100,6 +100,7 @@ export default function QuizClient() {
       });
 
       // Send data to MailerLite
+      console.log('📧 Sending data to MailerLite...');
       const mailerliteResponse = await fetch('/api/mailerlite', {
         method: 'POST',
         headers: {
@@ -117,13 +118,26 @@ export default function QuizClient() {
         }),
       });
 
-      const mailerliteData = await mailerliteResponse.json();
+      console.log('📧 MailerLite response status:', mailerliteResponse.status);
+      
+      let mailerliteData;
+      try {
+        mailerliteData = await mailerliteResponse.json();
+        console.log('📧 MailerLite response data:', mailerliteData);
+      } catch (error) {
+        console.error('❌ Failed to parse MailerLite response:', error);
+        toast.error('Error processing server response, but results saved locally');
+        router.push('/results');
+        return;
+      }
 
-      if (mailerliteData.success) {
+      if (mailerliteResponse.ok && mailerliteData.success) {
         toast.success('Results sent successfully! Check your email.');
+        console.log('✅ Successfully sent to MailerLite');
       } else {
-        toast.error('Email sending failed, but results saved locally');
-        console.error('MailerLite error:', mailerliteData.error);
+        const errorMessage = mailerliteData.error || 'Unknown error';
+        toast.error(`Email sending failed: ${errorMessage}. Results saved locally.`);
+        console.error('❌ MailerLite error:', errorMessage);
       }
 
       router.push('/results');

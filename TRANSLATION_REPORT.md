@@ -1,11 +1,11 @@
 # Translation Report: Auswanderer App (German → English)
 
 ## Overview
-This document details all translations made to convert the "Auswanderer Mindset Test" from German to English. The translated version is now called "Emigrant Mindset Test".
+This document details all translations made to convert the "Auswanderer Mindset Test" from German to English. The translated version is now called "Expat Mindset Test".
 
 **Translation Date:** October 26, 2025  
 **Original App Name:** Auswanderer Mindset Test  
-**Translated App Name:** Emigrant Mindset Test  
+**Translated App Name:** Expat Mindset Test  
 **Total Files Modified:** 8
 
 ---
@@ -18,7 +18,7 @@ This document details all translations made to convert the "Auswanderer Mindset 
 #### Changes Made:
 | Line(s) | Original German Text | English Translation |
 |---------|---------------------|---------------------|
-| 15 | Auswanderer Mindset Test | Emigrant Mindset Test |
+| 15 | Auswanderer Mindset Test | Expat Mindset Test |
 | 19 | Finde in nur 5 Minuten heraus, wie gut du mental und emotional auf eine Auswanderung vorbereitet bist. | Find out in just 5 minutes how well you are mentally and emotionally prepared for emigration. |
 | 27 | Fragen | Questions |
 | 31 | Kategorien | Categories |
@@ -44,7 +44,7 @@ This document details all translations made to convert the "Auswanderer Mindset 
 #### Changes Made:
 | Line(s) | Original German Text | English Translation |
 |---------|---------------------|---------------------|
-| 11 | title: 'Auswanderer-Mindset Test' | title: 'Emigrant Mindset Test' |
+| 11 | title: 'Auswanderer-Mindset Test' | title: 'Expat Mindset Test' |
 | 12 | description: 'Finde in nur 5 Minuten heraus, wie gut du mental und emotional auf eine Auswanderung vorbereitet bist. Kostenloser Test mit detaillierter Auswertung und persönlichen Empfehlungen.' | description: 'Find out in just 5 minutes how well you are mentally and emotionally prepared for emigration. Free test with detailed evaluation and personal recommendations.' |
 | 21 | lang="de" | lang="en" |
 
@@ -58,7 +58,7 @@ This document details all translations made to convert the "Auswanderer Mindset 
 #### Changes Made:
 | Line(s) | Original German Text | English Translation |
 |---------|---------------------|---------------------|
-| 10 | Auswanderer Mindset Test | Emigrant Mindset Test |
+| 10 | Auswanderer Mindset Test | Expat Mindset Test |
 
 **Summary:** Translated application title in header.
 
@@ -122,7 +122,7 @@ This document details all translations made to convert the "Auswanderer Mindset 
 | 107 | Test abgeschlossen! | Test Completed! |
 | 109 | Hallo {userSession.name}, hier sind deine Ergebnisse | Hello {userSession.name}, here are your results |
 | 115 | Comment: "Gesamtergebnis" | Comment: "Overall Result" |
-| 120 | Dein Auswanderer-Mindset | Your Emigrant Mindset |
+| 120 | Dein Auswanderer-Mindset | Your Expat Mindset |
 | 141 | Comment: "Kategorie-Ergebnisse" | Comment: "Category Results" |
 | 146 | Detaillierte Auswertung | Detailed Evaluation |
 | 171 | Comment: "Empfehlungen" | Comment: "Recommendations" |
@@ -408,7 +408,7 @@ Translation: 🎉 You are already very well positioned! Use your balanced skills
 #### Changes Made:
 | Line(s) | Original German Text | English Translation |
 |---------|---------------------|---------------------|
-| 2 | "name": "auswanderer-mindset-test" | "name": "emigrant-mindset-test" |
+| 2 | "name": "auswanderer-mindset-test" | "name": "expat-mindset-test" |
 
 **Summary:** Updated package name to reflect English version.
 
@@ -447,8 +447,8 @@ Translation: 🎉 You are already very well positioned! Use your balanced skills
 ### Terminology Consistency
 | German Term | English Translation | Rationale |
 |-------------|---------------------|-----------|
-| Auswanderer | Emigrant | Standard English term for someone leaving their country |
-| Auswanderung | Emigration | Consistent with "Emigrant" |
+| Auswanderer | Expat | Standard English term for someone leaving their country |
+| Auswanderung | Emigration | Consistent with "Expat" |
 | Mindset | Mindset | International term, kept as-is |
 | Veränderungsbereitschaft | Willingness to Change | Clear and concise |
 | Sicherheitsbedürfnis | Need for Security | Natural English phrasing |
@@ -522,7 +522,7 @@ Files changed: 8 files changed, 199 insertions(+), 199 deletions(-)
 
 ### Backup Locations
 - **Original German Version:** `/home/ubuntu/Uploads/Auswanderer App/`
-- **English Translated Version:** `/home/ubuntu/code_artifacts/emigrant_mindset_test_english/`
+- **English Translated Version:** `/home/ubuntu/code_artifacts/expat_mindset_test_english/`
 - **Also in Uploads:** `/home/ubuntu/Uploads/Auswanderer App_english/`
 
 ---

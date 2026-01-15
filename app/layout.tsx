@@ -8,7 +8,7 @@ import { Toaster } from "sonner"
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Emigrant Mindset Test',
+  title: 'Expat Mindset Test',
   description: 'Find out in just 5 minutes how well you are mentally and emotionally prepared for emigration. Free test with detailed evaluation and personal recommendations.',
 }
 

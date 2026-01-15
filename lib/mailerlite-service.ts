@@ -52,6 +52,7 @@ export async function createOrUpdateSubscriber(
     };
 
     console.log('📧 Creating/updating subscriber in MailerLite...');
+    console.log('📧 Subscriber data:', JSON.stringify(subscriberData, null, 2));
 
     // Create or update subscriber
     const response = await fetch(`${MAILERLITE_API_URL}/subscribers`, {
@@ -59,25 +60,56 @@ export async function createOrUpdateSubscriber(
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${MAILERLITE_API_KEY}`,
+        'Accept': 'application/json',
       },
       body: JSON.stringify(subscriberData),
     });
 
+    console.log('📧 Response status:', response.status);
+    console.log('📧 Response headers:', Object.fromEntries(response.headers.entries()));
+
+    // Read response text first for debugging
+    const responseText = await response.text();
+    console.log('📧 Response body:', responseText);
+
     if (!response.ok) {
-      const errorData = await response.json();
+      let errorData;
+      try {
+        errorData = JSON.parse(responseText);
+      } catch (e) {
+        errorData = { message: responseText };
+      }
       console.error('❌ MailerLite subscriber creation failed:', errorData);
       return {
         success: false,
-        error: errorData.message || 'Failed to create subscriber',
+        error: errorData.message || `HTTP ${response.status}: ${responseText}`,
       };
     }
 
-    const result = await response.json();
-    console.log('✅ Subscriber created/updated successfully:', result.data.id);
+    let result;
+    try {
+      result = JSON.parse(responseText);
+    } catch (e) {
+      console.error('❌ Failed to parse response JSON:', e);
+      return {
+        success: false,
+        error: 'Invalid JSON response from MailerLite',
+      };
+    }
+
+    console.log('✅ Subscriber created/updated successfully');
+    console.log('✅ Full result:', JSON.stringify(result, null, 2));
+
+    // MailerLite API returns subscriber data directly or in a data wrapper
+    const subscriberId = result.data?.id || result.id;
+    
+    if (!subscriberId) {
+      console.warn('⚠️ No subscriber ID found in response, but operation may have succeeded');
+    }
 
     return {
       success: true,
-      subscriberId: result.data.id,
+      subscriberId: subscriberId,
     };
   } catch (error) {
     console.error('❌ Error creating subscriber:', error);
